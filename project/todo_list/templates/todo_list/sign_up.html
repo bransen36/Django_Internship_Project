@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://utahhealthcare.github.io/gloss-docs/gloss-source/dist/css/gloss.min.css?1594842797"
+        rel="stylesheet">
+    <script src="https://utahhealthcare.github.io/gloss-docs/gloss-source/dist/js/gloss.min.js?1594842797"></script>
+    <script
+        src="https://utahhealthcare.github.io/gloss-docs/gloss-source/dist/js/gloss-icons.min.js?1594842797"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+</head>
+
+<body>
+    <form method="post" class="gls-container">
+
+        <h1>Sign Up</h1>
+        <fieldset class="gls-fieldset">
+            {% if form.non_field_errors %}
+                <div class="gls-text-danger">{{ form.non_field_errors.0 }}</div>
+            {% endif %}
+            <div class="gls-margin">
+                {{ form.username }}
+                {{ form.username.errors }}
+            </div>
+            <div class="gls-margin">
+                {{ form.email }}
+                {{ form.email.errors }}
+            </div>
+            <div class="gls-margin">
+                {{ form.password1 }}
+                {{ form.password1.errors }}
+            </div>
+            <div class="gls-margin">
+                {{ form.password2 }}
+                {{ form.password2.errors }}
+            </div>
+            <div class="gls-margin">
+                <button type="submit" class="gls-button gls-button-default">Sign Up</button>
+            </div>
+        </fieldset>
+        <p><a href="{% url 'index' %}">Back to Home</a></p>
+        {% csrf_token %}
+    </form>
+
+</body>
+
+</html>
