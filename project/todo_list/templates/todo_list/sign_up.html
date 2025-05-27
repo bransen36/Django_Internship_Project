@@ -9,9 +9,9 @@
 <body>
     {% block navbar %}{% endblock %}
     {% block content %}
-    <form method="post" class="gls-container gls-background-muted">
+    <form method="post" class="gls-container gls-background-secondary gls-margin-large-top">
 
-        <h1>Sign Up</h1>
+        <h1 class="gls-margin-medium-top">Sign Up</h1>
         <fieldset class="gls-fieldset">
             {% if form.non_field_errors %}
                 <div class="gls-text-danger">{{ form.non_field_errors.0 }}</div>
