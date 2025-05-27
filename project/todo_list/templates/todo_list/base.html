@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}<meta charset="UTF-8">
+    <link href="https://utahhealthcare.github.io/gloss-docs/gloss-source/dist/css/gloss.min.css?1594842797" rel="stylesheet">
+    <script src="https://utahhealthcare.github.io/gloss-docs/gloss-source/dist/js/gloss.min.js?1594842797"></script>
+    <script src="https://utahhealthcare.github.io/gloss-docs/gloss-source/dist/js/gloss-icons.min.js?1594842797"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Site{% endblock %}</title>{% endblock %}
+</head>
+<body>
+    {% block navbar %}
+    <nav class="gls-navbar gls-background-primary" gls-navbar>
+
+        <div class="gls-navbar-left">
+            <ul class="gls-navbar-nav">
+                <li class="gls-navbar-nav"><a href="{% url 'login' %}">Home</a></li>
+                <li class="gls-navbar-nav"><a href="{% url 'lists' %}">Lists</a></li>
+                <li class="gls-navbar-nav"><a href="{% url 'login' %}">About</a></li>
+                <li class="gls-navbar-nav"><a href="{% url 'login' %}">Contact</a></li>
+            </ul>
+        </div>
+        <div class="gls-navbar-right">
+            <ul class="gls-navbar-nav">
+                {% if user.is_authenticated %}
+                <li>
+                    <a href="#">{{ user.username }}</a>
+                    <div class="gls-navbar-dropdown">
+                        <ul class="gls-nav gls-navbar-dropdown-nav">
+                            <li class="gls-nav-header"><a href="#">Profile</a></li>
+                            <li class="gls-nav-divider"></li>
+                            <li><a href="{% url 'logout' %}">Log Out</a></li>
+                        </ul>
+                    </div>
+                </li>
+                {% else %}
+                <li class="gls-navbar-nav"><a href="{% url 'login' %}">Login</a></li>
+                <li class="gls-navbar-nav"><a href="{% url 'sign_up' %}">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    {% endblock %}
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

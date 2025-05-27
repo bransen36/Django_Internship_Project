@@ -1,0 +1,14 @@
+{% extends "todo_list/base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}Lists{% endblock %}</title>
+</head>
+<body>
+    {% block content %}
+    <h1>Lists</h1>
+        <p><a href="{% url 'index' %}">Back to Home</a></p>
+        {% csrf_token %}
+    {% endblock %}
+</body>
+</html>

@@ -1,20 +1,15 @@
+{% extends "todo_list/base.html" %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <link href="https://utahhealthcare.github.io/gloss-docs/gloss-source/dist/css/gloss.min.css?1594842797"
-        rel="stylesheet">
-    <script src="https://utahhealthcare.github.io/gloss-docs/gloss-source/dist/js/gloss.min.js?1594842797"></script>
-    <script
-        src="https://utahhealthcare.github.io/gloss-docs/gloss-source/dist/js/gloss-icons.min.js?1594842797"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>{% block title %}Login{% endblock %}</title>
 </head>
 
 <body>
-
-    <form method="post" class="gls-container">
+    {% block navbar %}{% endblock %}\
+    {% block content %}
+    <form method="post" class="gls-container gls-background-muted">
         
         <h1>Login</h1>
         <fieldset class="gls-fieldset">
@@ -38,7 +33,7 @@
         <p><a href="{% url 'index' %}">Back to Home</a></p>
         {% csrf_token %}
     </form>
-
+    {% endblock %}
 </body>
 
 </html>
