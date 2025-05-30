@@ -1,4 +1,4 @@
-{% extends "todo_list/base.html" %}
+{% extends "todo_list/index.html" %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,9 +6,9 @@
 </head>
 <body>
     {% block content %}
-    <h1>Lists</h1>
-        <p><a href="{% url 'index' %}">Back to Home</a></p>
-        {% csrf_token %}
+    <div class="gls-container">
+        <h1>Lists</h1>
+    </div>
     {% endblock %}
 </body>
 </html>

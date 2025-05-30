@@ -1,17 +1,58 @@
-{% extends "todo_list/base.html" %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <title>{% block title %}Home{% endblock %}</title>
+    {% block head %}<meta charset="UTF-8">
+    <link href="https://utahhealthcare.github.io/gloss-docs/gloss-source/dist/css/gloss.min.css?1594842797" rel="stylesheet">
+    <script src="https://utahhealthcare.github.io/gloss-docs/gloss-source/dist/js/gloss.min.js?1594842797"></script>
+    <script src="https://utahhealthcare.github.io/gloss-docs/gloss-source/dist/js/gloss-icons.min.js?1594842797"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Home{% endblock %}</title>{% endblock %}
 </head>
-
 <body>
-    {% block content %}
-        <div class="gls-container">
-            <h1 class="gls-container">Welcome to the Homepage</h1>
-        </div>
-    {% endblock %}
-</body>
+    {% block navbar %}
+    <nav class="gls-navbar gls-background-primary" gls-navbar>
 
+        <div class="gls-navbar-left">
+            <ul class="gls-navbar-nav">
+                <li class="gls-navbar-nav"><a href="{% url 'index' %}">Home</a></li>
+                <li class="gls-navbar-nav"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li class="gls-navbar-nav"><a href="{% url 'lists' %}">Lists</a></li>
+                <li class="gls-navbar-nav"><a href="{% url 'login' %}">About</a></li>
+                <li class="gls-navbar-nav"><a href="{% url 'login' %}">Contact</a></li>
+            </ul>
+        </div>
+        <div class="gls-navbar-right">
+            <ul class="gls-navbar-nav">
+                {% if user.is_authenticated %}
+                <li>
+                    <a href="#" gls-icon="icon: user; ratio: 1.5">{{ user.first_name }}</a>
+                    <div class="gls-navbar-dropdown">
+                        <ul class="gls-nav gls-navbar-dropdown-nav">
+                            <li class="gls-nav-header"><a href="#">Profile</a></li>
+                            <li class="gls-nav-divider"></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" gls-icon="icon: sign-out; ratio: 0.5">Log Out</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                {% else %}
+                <li class="gls-navbar-nav"><a href="{% url 'login' %}">Login</a></li>
+                <li class="gls-navbar-nav"><a href="{% url 'sign_up' %}">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    {% endblock %}
+    <main>
+        {% block content %}
+        <div class="gls-container">
+            <h1>Homepage</h1>
+        </div>
+        {% endblock %}
+    </main>
+</body>
 </html>

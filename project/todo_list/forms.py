@@ -11,6 +11,14 @@ class LoginForm(forms.Form):
     }), label='Password')
 
 class SignUpForm(forms.Form):
+    first_name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'gls-input','placeholder': 'First Name'
+        }),label='FirstName', max_length=50)
+
+    last_name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'gls-input','placeholder': 'Last Name'
+        }),label='LastName', max_length=50)
+
     username = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'gls-input','placeholder': 'Username'
         }),label='Username', max_length=100)

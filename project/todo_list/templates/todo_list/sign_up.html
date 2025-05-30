@@ -1,4 +1,4 @@
-{% extends "todo_list/base.html" %}
+{% extends "todo_list/index.html" %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,8 +14,25 @@
         <h1 class="gls-margin-medium-top">Sign Up</h1>
         <fieldset class="gls-fieldset">
             {% if form.non_field_errors %}
-                <div class="gls-text-danger">{{ form.non_field_errors.0 }}</div>
+                <div class="gls-text-warning">{{ form.non_field_errors.0 }}</div>
             {% endif %}
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <p{% if message.tags %} class="{{ message.tags }} gls-text-warning"{% endif %}>
+                        {{ message }}
+                    
+                    {% endfor %}
+                </div>
+                {% endif %}
+            <div class="gls-margin">
+                {{ form.first_name }}
+                {{ form.first_name.errors }}
+            </div>
+            <div class="gls-margin">
+                {{ form.last_name }}
+                {{ form.last_name.errors }}
+            </div>
             <div class="gls-margin">
                 {{ form.username }}
                 {{ form.username.errors }}

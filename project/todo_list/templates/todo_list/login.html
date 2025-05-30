@@ -1,4 +1,4 @@
-{% extends "todo_list/base.html" %}
+{% extends "todo_list/index.html" %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,7 +14,7 @@
         <fieldset class="gls-fieldset ">
             <h1 class="gls-margin-medium-top">Login</h1>
             {% if form.non_field_errors %}
-                <div class="gls-text-danger">{{ form.non_field_errors.0 }}</div>
+                <div class="gls-text-warning">{{ form.non_field_errors.0 }}</div>
             {% endif %}
             <div class="gls-margin">
                 {{ form.username }}
