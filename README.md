@@ -21,7 +21,7 @@ This project is a simple, functional Django-based web application for managing p
 
 ### Clone the Repository
   ```bash
-    git clone <repo-url>
+    git clone https://github.com/bransen36/Django_Internship_Project.git
     cd Django_Internship_Project
   ```
 ### Set up a Virtual Environment
