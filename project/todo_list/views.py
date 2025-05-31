@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
-from .forms import LoginForm, SignUpForm
+from .forms import LoginForm, SignUpForm, TaskForm
 from django.contrib.auth import *
 from django.contrib.auth.views import *
 from django.contrib.auth.mixins import *
 from django.views.generic import *
 from django.views import *
 from django.contrib import messages
+from datetime import datetime
+from todo_list.models import *
 
 
 # Create your views here.
@@ -73,11 +75,53 @@ class login_view(View):
     
 class logout_view(LoginRequiredMixin, LogoutView):
     def dispatch(self, request, *args, **kwargs):
-        messages.success(request, "You've been logged out.")
         return super().dispatch(request, *args, **kwargs)
     
 class list_view(LoginRequiredMixin, TemplateView):
     template_name = 'todo_list/lists.html'
+
+    def get(self, request):
+        form = TaskForm()
+        checklist_items = Checklist_Item.objects.filter(user=request.user).order_by('-created_at')
+        return render(request, self.template_name, {
+                'form': form,
+                'checklist_items': checklist_items,
+                'checklist_item_created': False
+            })
+
+    def post(self, request):
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            form_task = form.cleaned_data['task']
+            form_description = form.cleaned_data['description']
+            current_user = request.user
+            current_time = datetime.now()
+            complete = False
+
+            checklistItem = Checklist_Item.objects.create(
+                user = current_user,
+                task = form_task,
+                description = form_description,
+                created_at = current_time,
+                is_complete = complete
+            )
+            form = TaskForm()
+            checklist_items = Checklist_Item.objects.filter(user=request.user).order_by('-created_at')
+            return render(request, self.template_name, {
+                'form': form,
+                'checklist_items': checklist_items,
+                'checklist_item_created': True
+            })
+        else:
+            messages.error(request, "The given information was insufficient")
+            checklist_items = Checklist_Item.objects.filter(user=request.user).order_by('-created_at')
+            return render(request, self.template_name, {
+                'form': form,
+                'checklist_items': checklist_items,
+                'checklist_item_created': False
+            })
+    
+
 
 class dashboard(LoginRequiredMixin, TemplateView):
     template_name = 'todo_list/dashboard.html'

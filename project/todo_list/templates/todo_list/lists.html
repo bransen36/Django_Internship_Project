@@ -7,7 +7,68 @@
 <body>
     {% block content %}
     <div class="gls-container">
-        <h1>Lists</h1>
+        <button class="gls-button gls-button-primary gls-align-right gls-margin-top" gls-toggle="target: #task_modal">New Item</button>
+        <h1>{{ user.first_name }}'s To-Do List</h1>
+        <ul class="gls-list">
+            {% for item in checklist_items %}
+                <li class=" gls-button gls-button-default gls-margin  gls-margin-remove-left gls-padding-small" gls-toggle="target: #detail_modal_{{ item.id }}" gls-grid>
+                    <strong class="gls-width-1-6 gls-text-left gls-padding-remove-left">{{ item.task|truncatechars:23 }}</strong>
+                    <p class="gls-width-expand gls-text-left">{{ item.description|truncatechars:125 }}</p>
+                    <small class="gls-width-1-5 gls-text-right">Created: {{ item.created_at|date:"M d, Y" }}</small>
+                    <form class="gls-width-auto">
+                        <button class="gls-button gls-button-secondary gls-button-small" onclick="event.stopPropagation();">Edit</button>
+                        <button class="gls-button gls-button-danger gls-button-small" onclick="event.stopPropagation();">Delete</button>
+                    </form>
+                </li>
+
+            <div id="detail_modal_{{ item.id }}" gls-modal>
+                <div class="gls-modal-dialog gls-margin-auto-vertical gls-modal-body">
+                    <div class="gls-modal-header">
+                        <h2 class="gls-modal-title">{{ item.task }}</h2>
+                    </div>
+                    <div class="gls-modal-body gls-margin">
+                        {% if item.description %}
+                            {{ item.description }}
+                        {% else %}
+                            There is no description for this task!
+                        {% endif %}
+                    </div>
+                    <div class="gls-modal-footer gls-text-right">
+                        <small class="gls-align-left">Created On: {{ item.created_at }}</small>
+                        <button class="gls-button gls-button-primary gls-modal-close">Close</button>
+                    </div>
+                </div>
+            </div>
+
+            {% empty %}
+                <li>You have no checklist items yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div id="task_modal" gls-modal>
+        <div class="gls-modal-dialog gls-border gls-margin-auto-vertical gls-modal-body">
+            <div class="gls-modal-header">
+                <h2 class="gls-modal-title">Create New To-Do Item</h2>
+            </div>
+            <form method="post">
+                <fieldset class="gls-fieldset">
+                    <div class="gls-margin">
+                        {{ form.task }}
+                        {{ form.task.errors }}
+                    </div>
+                    <div class="gls-margin">
+                        {{ form.description }}
+                        {{ form.description.errors }}
+                    </div>
+                    <div class="gls-margin gls-flex gls-flex-middle  gls-flex-row">
+                        <button class="gls-button gls-button-default gls-margin-right">Create</buton>
+                        <button type="submit" class="gls-button gls-button-danger gls-modal-close gls-margin-left">Close</button>
+                    </div>
+                </fieldset>
+                {% csrf_token %}
+            </form>
+        </div>
     </div>
     {% endblock %}
 </body>

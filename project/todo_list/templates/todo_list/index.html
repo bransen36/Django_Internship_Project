@@ -10,22 +10,23 @@
 </head>
 <body>
     {% block navbar %}
-    <nav class="gls-navbar gls-background-primary" gls-navbar>
+    <nav class="gls-navbar gls-background-primary" gls-navbar gls-sticky="show-on-up: true; animation: gls-animation-slide-top">
 
         <div class="gls-navbar-left">
             <ul class="gls-navbar-nav">
-                <li class="gls-navbar-nav"><a href="{% url 'index' %}">Home</a></li>
-                <li class="gls-navbar-nav"><a href="{% url 'dashboard' %}">Dashboard</a></li>
-                <li class="gls-navbar-nav"><a href="{% url 'lists' %}">Lists</a></li>
-                <li class="gls-navbar-nav"><a href="{% url 'login' %}">About</a></li>
-                <li class="gls-navbar-nav"><a href="{% url 'login' %}">Contact</a></li>
+                <img class="gls-margin-left" src="https://utahhealthcare.github.io/gloss-docs/images/uhealth-logo-inverse.svg" width="140">
+                <li class="gls-margin-left"><a href="{% url 'index' %}">Home</a></li>
+                <li class=""><a class="" href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li class=""><a href="{% url 'lists' %}">Lists</a></li>
+                <li class=""><a href="{% url 'login' %}">About</a></li>
+                <li class=""><a href="{% url 'login' %}">Contact</a></li>
             </ul>
         </div>
         <div class="gls-navbar-right">
             <ul class="gls-navbar-nav">
                 {% if user.is_authenticated %}
                 <li>
-                    <a href="#" gls-icon="icon: user; ratio: 1.5">{{ user.first_name }}</a>
+                    <a href="#" class="gls-margin-right" gls-icon="icon: user; ratio: 1.5">{{ user.first_name }}</a>
                     <div class="gls-navbar-dropdown">
                         <ul class="gls-nav gls-navbar-dropdown-nav">
                             <li class="gls-nav-header"><a href="#">Profile</a></li>

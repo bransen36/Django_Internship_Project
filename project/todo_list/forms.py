@@ -42,4 +42,13 @@ class SignUpForm(forms.Form):
 
         if p1 and p2 and p1 != p2:
             raise forms.ValidationError("Passwords do not match.")
+        
+class TaskForm(forms.Form):
+    task = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'gls-input', 'placeholder': 'Task'
+    }), label='task', max_length=100)
+
+    description = forms.CharField(widget=forms.Textarea(attrs={
+        'class': 'gls-textarea', 'placeholder': 'Description'
+    }), label='description', required=False)
     
