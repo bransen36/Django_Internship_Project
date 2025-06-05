@@ -3,37 +3,16 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 class LoginForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'gls-input', 'placeholder': 'Username'
-    }), label='Username', max_length=100)
-    password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': 'gls-input', 'placeholder': 'Password'
-    }), label='Password')
+    username = forms.CharField(widget=forms.TextInput(), label='Username', max_length=100)
+    password = forms.CharField(widget=forms.PasswordInput(), label='Password')
 
 class SignUpForm(forms.Form):
-    first_name = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'gls-input','placeholder': 'First Name'
-        }),label='FirstName', max_length=50)
-
-    last_name = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'gls-input','placeholder': 'Last Name'
-        }),label='LastName', max_length=50)
-
-    username = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'gls-input','placeholder': 'Username'
-        }),label='Username', max_length=100)
-    
-    email = forms.EmailField(widget=forms.EmailInput(attrs={
-        'class': 'gls-input', 'placeholder': 'Email'
-    }),label='Email', max_length=100)
-    
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': 'gls-input','placeholder': 'Password'
-    }), label='Password1')
-
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': 'gls-input','placeholder': 'Confirm Password'
-    }), label='Password2')
+    first_name = forms.CharField(widget=forms.TextInput(),label='FirstName', max_length=50)
+    last_name = forms.CharField(widget=forms.TextInput(),label='LastName', max_length=50)
+    username = forms.CharField(widget=forms.TextInput(),label='Username', max_length=100)
+    email = forms.EmailField(widget=forms.EmailInput(),label='Email', max_length=100)
+    password1 = forms.CharField(widget=forms.PasswordInput(), label='Password1')
+    password2 = forms.CharField(widget=forms.PasswordInput(), label='Password2')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -43,12 +22,15 @@ class SignUpForm(forms.Form):
         if p1 and p2 and p1 != p2:
             raise forms.ValidationError("Passwords do not match.")
         
-class TaskForm(forms.Form):
-    task = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'gls-input', 'placeholder': 'Task'
-    }), label='task', max_length=100)
+class CreateTaskForm(forms.Form):
+    task = forms.CharField(widget=forms.TextInput(), label='task', max_length=100)
+    description = forms.CharField(widget=forms.Textarea(), label='description', required=False)
 
-    description = forms.CharField(widget=forms.Textarea(attrs={
-        'class': 'gls-textarea', 'placeholder': 'Description'
-    }), label='description', required=False)
+class EditTaskForm(forms.Form):
+    task = forms.CharField(widget=forms.TextInput(), label='task', max_length=100)
+    description = forms.CharField(widget=forms.Textarea(), label='description', required=False)
+    is_complete = forms.ChoiceField()
+
+class DeleteTaskForm(forms.Form):
+    pass
     

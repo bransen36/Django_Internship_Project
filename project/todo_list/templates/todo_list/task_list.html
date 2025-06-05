@@ -1,0 +1,56 @@
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+</head>
+
+<body>
+    {% block navbar %}{% endblock %}
+    {% block content %}
+    <div class="gls-container">
+        <ul class="gls-list">
+            {% for task in tasks %}
+            <li class=" gls-button gls-button-tertiary gls-margin  gls-margin-remove-left gls-padding-small" gls-toggle="target: #detail_modal_{{ task.id }}" gls-grid>
+                <strong class="gls-width-1-6 gls-text-left gls-padding-remove-left">{{ task.task|truncatechars:23 }}</strong>
+                <p class="gls-width-expand gls-text-left">{{ task.description|truncatechars:80 }}</p>
+                <small class="gls-width-1-5 gls-text-right">Created: {{ task.created_at|date:"M d, Y" }}</small>
+                <form class="gls-width-auto">
+                    <button method="put" class="gls-button gls-button-default gls-button-small" onclick="event.stopPropagation()">Complete Task</button>
+                </form>
+            </li>
+            <div id="detail_modal_{{ task.id }}" gls-modal>
+
+                <div class="gls-modal-dialog gls-margin-auto-vertical gls-modal-body">
+                    <button class="gls-modal-close-default" type="button" gls-close></button>
+                    <div class="gls-modal-header">
+                        <h2 class="gls-modal-title">{{ task.task }}</h2>
+                    </div>
+                    <div class="gls-modal-body gls-margin">
+                        {% if task.description %}
+                        {{ task.description }}
+                        {% else %}
+                        There is no description for this task!
+                        {% endif %}
+                    </div>
+                    <div class="gls-modal-footer gls-text-right">
+                        <small class="gls-align-left">Created On: {{ task.created_at }}</small>
+                        <form>
+                            <button method="put" class="gls-button gls-button-secondary">Edit</button>
+                            <button method="delete" name="{{ task.id }}" class="gls-button gls-button-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <li>You have no checklist items yet.</li>
+            {% endfor %}
+        </ul>
+        <!-- {% for task in tasks %}
+        
+        {% endfor %} -->
+    </div>
+    {% endblock %}
+</body>
+
+</html>

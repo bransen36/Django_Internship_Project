@@ -9,7 +9,7 @@ class User(AbstractUser):
     
 class Checklist_Item(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ManyToManyField(User, related_name='tasks') # related_name lets us do user.tasks.all()
     task = models.CharField(("The task to be completed for this checklist item."), max_length=100)
     description = models.TextField(("Long description of what the task is"), null=True)
     created_at = models.DateTimeField(("The date and time that the item was created"), auto_now=True)

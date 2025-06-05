@@ -2,15 +2,19 @@
 <html lang="en">
 <head>
     {% block head %}<meta charset="UTF-8">
+    <!-- Gloss CSS, JS, and Icons -->
     <link href="https://utahhealthcare.github.io/gloss-docs/gloss-source/dist/css/gloss.min.css?1594842797" rel="stylesheet">
     <script src="https://utahhealthcare.github.io/gloss-docs/gloss-source/dist/js/gloss.min.js?1594842797"></script>
     <script src="https://utahhealthcare.github.io/gloss-docs/gloss-source/dist/js/gloss-icons.min.js?1594842797"></script>
+
+    <!-- HTMX -->
+     <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.js" integrity="sha384-oeUn82QNXPuVkGCkcrInrS1twIxKhkZiFfr2TdiuObZ3n3yIeMiqcRzkIcguaof1" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Home{% endblock %}</title>{% endblock %}
 </head>
 <body>
     {% block navbar %}
-    <nav class="gls-navbar gls-background-primary" gls-navbar gls-sticky="show-on-up: true; animation: gls-animation-slide-top">
+    <nav class="gls-navbar gls-background-primary" gls-navbar>
 
         <div class="gls-navbar-left">
             <ul class="gls-navbar-nav">

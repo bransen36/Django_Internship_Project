@@ -1,4 +1,5 @@
 {% extends "todo_list/index.html" %}
+{% load widget_tweaks %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,27 +27,29 @@
                 </div>
                 {% endif %}
             <div class="gls-margin">
-                {{ form.first_name }}
+                {% render_field form.first_name class="gls-input" placeholder="First Name" %}
                 {{ form.first_name.errors }}
             </div>
             <div class="gls-margin">
-                {{ form.last_name }}
+                {% render_field form.last_name class="gls-input" placeholder="Last Name" %}
                 {{ form.last_name.errors }}
             </div>
             <div class="gls-margin">
-                {{ form.username }}
+                {% render_field form.username class="gls-input" placeholder="Username" hx-post="/check_username/" hx-swap="outerhtml" hx-trigger="keyup delay:1500ms" hx-target="#username-error" %}
+                <div id="username-error"></div>
                 {{ form.username.errors }}
             </div>
             <div class="gls-margin">
-                {{ form.email }}
+                {% render_field form.email class="gls-input" placeholder="Email" hx-post="/check_email/" hx-swap="outerhtml" hx-trigger="keyup delay:1s" hx-target="#email-error" %}
+                <div id="email-error"></div>
                 {{ form.email.errors }}
             </div>
             <div class="gls-margin">
-                {{ form.password1 }}
+                {% render_field form.password1 class="gls-input" placeholder="Password" %}
                 {{ form.password1.errors }}
             </div>
             <div class="gls-margin">
-                {{ form.password2 }}
+                {% render_field form.password2 class="gls-input" placeholder="Confirm Password" %}
                 {{ form.password2.errors }}
             </div>
             <div class="gls-margin">

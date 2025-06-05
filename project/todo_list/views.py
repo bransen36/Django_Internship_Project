@@ -1,5 +1,6 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .forms import LoginForm, SignUpForm, TaskForm
+from .forms import *
 from django.contrib.auth import *
 from django.contrib.auth.views import *
 from django.contrib.auth.mixins import *
@@ -49,6 +50,20 @@ class signup_view(View):
                 return render(request, 'todo_list/sign_up.html', {'form': form})
         else:
             return render(request, 'todo_list/sign_up.html', {'form': form})
+        
+    def check_username(request):
+        username = request.POST.get('username')
+        if get_user_model().objects.filter(username=username).exists():
+            return HttpResponse("<div id='username-error' class='gls-text-danger'>This username is already taken</div>")
+        else:
+            return HttpResponse("<div id='username-error' class='gls-text-success'>This username is available</div>")
+        
+    def check_email(request):
+        email = request.POST.get('email')
+        if get_user_model().objects.filter(email=email).exists():
+            return HttpResponse("<div id='email-error' class='gls-text-danger'>This email is already linked to an account</div>")
+        else:
+            return HttpResponse("<div id='email-error' class='gls-text-success'>This email is available")
 
 # Login View
 class login_view(View):
@@ -81,45 +96,45 @@ class list_view(LoginRequiredMixin, TemplateView):
     template_name = 'todo_list/lists.html'
 
     def get(self, request):
-        form = TaskForm()
-        checklist_items = Checklist_Item.objects.filter(user=request.user).order_by('-created_at')
-        return render(request, self.template_name, {
-                'form': form,
-                'checklist_items': checklist_items,
-                'checklist_item_created': False
-            })
+        form = CreateTaskForm()
+        tasks = request.user.tasks.all()
+        # checklist_items = Checklist_Item.objects.filter(user=request.user).order_by('-created_at')
+        return render(request, 'todo_list/lists.html', {'tasks': tasks, 'form': form})
+        
+    class TaskList(ListView):
+        template_name = 'lists.html'
+        model = Checklist_Item
+        context_object_name = 'tasks'
 
-    def post(self, request):
-        form = TaskForm(request.POST)
-        if form.is_valid():
-            form_task = form.cleaned_data['task']
-            form_description = form.cleaned_data['description']
-            current_user = request.user
-            current_time = datetime.now()
-            complete = False
+        def get_queryset(self):
+            user = self.request.user
+            return user.tasks.all()
+        
+    def add_task(request):
+        task = request.POST.get('task')
+        description = request.POST.get('description')
 
-            checklistItem = Checklist_Item.objects.create(
-                user = current_user,
-                task = form_task,
-                description = form_description,
-                created_at = current_time,
-                is_complete = complete
-            )
-            form = TaskForm()
-            checklist_items = Checklist_Item.objects.filter(user=request.user).order_by('-created_at')
-            return render(request, self.template_name, {
-                'form': form,
-                'checklist_items': checklist_items,
-                'checklist_item_created': True
-            })
-        else:
-            messages.error(request, "The given information was insufficient")
-            checklist_items = Checklist_Item.objects.filter(user=request.user).order_by('-created_at')
-            return render(request, self.template_name, {
-                'form': form,
-                'checklist_items': checklist_items,
-                'checklist_item_created': False
-            })
+        new_task = Checklist_Item.objects.create(
+            task=task,
+            description=description,
+            created_at = datetime.now(),
+            is_complete = False)
+
+        # add the task to the user's list
+        request.user.tasks.add(new_task)
+
+        # return template with all of the user's films
+        tasks = request.user.tasks.all()
+        form = CreateTaskForm()
+        return render(request, 'todo_list/task_list.html', {'tasks': tasks, 'form': form})
+
+        
+    def put(self, request):
+        form = EditTaskForm(request.PUT)
+
+    class TaskDelete(DeleteView):
+        model = Checklist_Item
+        template_name = 'task_list.html'
     
 
 
