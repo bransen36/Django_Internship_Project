@@ -127,14 +127,29 @@ class list_view(LoginRequiredMixin, TemplateView):
         tasks = request.user.tasks.all()
         form = CreateTaskForm()
         return render(request, 'todo_list/task_list.html', {'tasks': tasks, 'form': form})
+    
+    def complete_task(request):
+        task_id = request.POST.get('id')
+
+        task = Checklist_Item.objects.get(id=task_id, user=request.user)
+        if task.is_complete:
+            task.is_complete = False
+            task.save()
+        else:
+            task.is_complete = True
+            task.save()
+        tasks = request.user.tasks.all()
+        return render(request, 'todo_list/task_list.html', {'tasks': tasks})
 
         
-    def put(self, request):
-        form = EditTaskForm(request.PUT)
+    def delete_task(request):
+        task_id = request.POST.get('id')
 
-    class TaskDelete(DeleteView):
-        model = Checklist_Item
-        template_name = 'task_list.html'
+        Checklist_Item.objects.filter(id=task_id).delete()
+
+        tasks = request.user.tasks.all()
+        form = CreateTaskForm()
+        return render(request, 'todo_list/task_list.html', {'tasks': tasks, 'form': form})
     
 
 

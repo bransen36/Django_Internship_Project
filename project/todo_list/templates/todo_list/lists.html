@@ -7,33 +7,35 @@
 </head>
 <body>
     {% block content %}
-    <div class="gls-container">
+    <div class="gls-container" >
         <button class="gls-button gls-button-primary gls-align-right gls-margin-top" gls-toggle="target: #task_modal">New Item</button>
         <h1 class="gls-margin">{{ user.first_name }}'s To-Do List</h1>
     </div>
 
     <div id="task_modal" gls-modal>
         <div class="gls-modal-dialog gls-border gls-margin-auto-vertical gls-modal-body">
+            <button class="gls-modal-close-default" type="button" gls-close></button>
             <div class="gls-modal-header">
                 <h2 class="gls-modal-title">Create New To-Do Item</h2>
             </div>
-            <form method="post">
-                <fieldset class="gls-fieldset">
-                    <div class="gls-margin">
-                        {% render_field form.task name="task" class="gls-input" placeholder="Task" %}
-                        {{ form.task.errors }}
-                    </div>
-                    <div class="gls-margin" style="max-width: 100%">
-                        {% render_field form.description name="description" class="gls-textarea" placeholder="Description" %}
-                        {{ form.description.errors }}
-                    </div>
-                    <div class="gls-margin gls-flex gls-flex-middle  gls-flex-row">
-                        <button class="gls-button gls-button-default gls-margin-right gls-modal-close" hx-post="{% url 'add_task' %}" hx-target="#task_list">Create</buton>
-                        <button type="submit" class="gls-button gls-button-danger gls-modal-close gls-margin-left">Close</button>
-                    </div>
-                </fieldset>
-                {% csrf_token %}
-            </form>
+            <div class="gls-modal-body">
+                <form method="post">
+                    <fieldset class="gls-fieldset">
+                        <div class="gls-margin">
+                            {% render_field form.task name="task" class="gls-input" placeholder="Task" %}
+                            {{ form.task.errors }}
+                        </div>
+                        <div class="gls-margin" style="max-width: 100%">
+                            {% render_field form.description name="description" class="gls-textarea" placeholder="Description" %}
+                            {{ form.description.errors }}
+                        </div>
+                        <div class="gls-margin gls-flex gls-flex-middle  gls-flex-row">
+                            <button class="gls-button gls-button-default gls-margin-right gls-modal-close" hx-post="{% url 'add_task' %}" hx-target="#task_list">Create</buton>
+                        </div>
+                    </fieldset>
+                    {% csrf_token %}
+                </form>
+            </div>
         </div>
     </div>
 
