@@ -1,0 +1,42 @@
+{% extends "todo_list/index.html" %}
+{% load widget_tweaks %}
+
+<head>
+    <title>{% block title %}Profile{% endblock %}</title>
+</head>
+
+<body>
+    {% block content %}
+    <div class="gls-container">
+        <h1>Profile</h1>
+        <div class="gls-margin">
+            {% render_field form.first_name class="gls-input" placeholder="First Name" %}
+            {{ form.firstname.errors }}
+        </div>
+        <div class="gls-margin">
+            {% render_field form.last_name class="gls-input" placeholder="Last Name" %}
+            {{ form.lastname.errors }}
+        </div>
+        <div class="gls-margin">
+            {% render_field form.username class="gls-input" placeholder="Username" %}
+            {{ form.username.errors }}
+        </div>
+        <div class="gls-margin">
+            {% render_field form.phone_number class="gls-input" placeholder="Phone" %}
+            {{ form.phone_number.errors }}
+        </div>
+        <div class="gls-margin">
+            {% render_field form.address1 class="gls-input" placeholder="Address 1" %}
+            {{ form.address1.errors }}
+        </div>
+        <div class="gls-margin">
+            {% render_field form.address2 class="gls-input" placeholder="Address 2" %}
+            {{ form.address2.errors }}
+        </div>
+        <div class="gls-margin">
+            <button class="gls-button gls-button-secondary">Edit</button>
+        </div>
+    </div>
+    
+    {% endblock %}
+</body>

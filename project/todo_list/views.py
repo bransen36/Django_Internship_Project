@@ -93,25 +93,17 @@ class login_view(View):
 class logout_view(LoginRequiredMixin, LogoutView):
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
-    
+
+# All views that have to do with the list page. Add, Edit, Delete, etc..
 class list_view(LoginRequiredMixin, TemplateView):
     template_name = 'todo_list/lists.html'
 
     def get(self, request):
         form = CreateTaskForm()
         tasks = request.user.tasks.all()
-        # checklist_items = Checklist_Item.objects.filter(user=request.user).order_by('-created_at')
         return render(request, 'todo_list/lists.html', {'tasks': tasks, 'form': form})
         
-    class TaskList(ListView):
-        template_name = 'lists.html'
-        model = Checklist_Item
-        context_object_name = 'tasks'
-
-        def get_queryset(self):
-            user = self.request.user
-            return user.tasks.all()
-        
+    # View to add a new CheckList_Item to the database.
     def add_task(request):
         task = request.POST.get('task')
         description = request.POST.get('description')
@@ -136,6 +128,7 @@ class list_view(LoginRequiredMixin, TemplateView):
         
         return render(request, 'todo_list/lists.html', {'tasks': tasks, 'form': form})
     
+    # View to mark a CheckList_Item as Complete or Incomplete using the Complete Task/Un-Complete button
     def complete_task(request):
         task_id = request.POST.get('id')
 
@@ -149,7 +142,7 @@ class list_view(LoginRequiredMixin, TemplateView):
         tasks = request.user.tasks.all()
         return render(request, 'todo_list/task_list.html', {'tasks': tasks})
 
-        
+    # View to delete a CheckList_Item
     def delete_task(request):
         task_id = request.POST.get('id')
 
@@ -159,6 +152,7 @@ class list_view(LoginRequiredMixin, TemplateView):
         form = CreateTaskForm()
         return render(request, 'todo_list/task_list.html', {'tasks': tasks, 'form': form})
     
+    # View to edit a CheckList_Item
     def edit_task(request):
         task_id = request.POST.get('id') or request.GET.get('id')
         task = Checklist_Item.objects.filter(id=task_id).get()
@@ -190,3 +184,19 @@ class list_view(LoginRequiredMixin, TemplateView):
 
 class dashboard(LoginRequiredMixin, TemplateView):
     template_name = 'todo_list/dashboard.html'
+
+# All views that have to do with the Profile page
+class profile_view(LoginRequiredMixin, TemplateView):
+    template_name = 'todo_list/profile.html'
+
+    def get(self, request):
+        user = request.user
+        form = EditUserForm(initial={
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'username': user.username,
+            'phone_number': user.phone_number,
+            'address1': user.address1,
+            'address2': user.address2
+        })
+        return render(request, 'todo_list/profile.html', {'user': user, 'form': form})

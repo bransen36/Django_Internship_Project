@@ -1,5 +1,4 @@
 from django.urls import path
-from django.contrib.auth.views import LogoutView
 from . import views
 
 urlpatterns = [
@@ -9,7 +8,7 @@ urlpatterns = [
     path('lists/', views.list_view.as_view(), name='lists'),
     path('logout/', views.logout_view.as_view(next_page='index'), name='logout'),
     path('dashboard/', views.dashboard.as_view(), name='dashboard'),
-    path('tasks/', views.list_view.TaskList.as_view(), name='task_list')
+    path('profile/', views.profile_view.as_view(), name='profile')
 ]
 
 htmx_urlpatterns = [

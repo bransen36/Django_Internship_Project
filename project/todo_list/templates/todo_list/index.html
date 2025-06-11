@@ -33,7 +33,7 @@
                     <a href="#" class="gls-margin-right" gls-icon="icon: user; ratio: 1.5">{{ user.first_name }}</a>
                     <div class="gls-navbar-dropdown">
                         <ul class="gls-nav gls-navbar-dropdown-nav">
-                            <li class="gls-nav-header"><a href="#">Profile</a></li>
+                            <li class="gls-nav-header"><a href="{% url 'profile' %}">Profile</a></li>
                             <li class="gls-nav-divider"></li>
                             <li>
                                 <form action="{% url 'logout' %}" method="post">

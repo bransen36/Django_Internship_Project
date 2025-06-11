@@ -22,6 +22,14 @@ class SignUpForm(forms.Form):
         if p1 and p2 and p1 != p2:
             raise forms.ValidationError("Passwords do not match.")
         
+class EditUserForm(forms.Form):
+    first_name = forms.CharField(widget=forms.TextInput(), label='firstname')
+    last_name = forms.CharField(widget=forms.TextInput(), label='lastname')
+    username = forms.CharField(widget=forms.TextInput(), label='username')
+    phone_number = forms.IntegerField(widget=forms.TextInput(), label='phone')
+    address1 = forms.CharField(widget=forms.TextInput(), label='address1')
+    address2 = forms.CharField(widget=forms.TextInput(), label='address2')
+        
 class CreateTaskForm(forms.Form):
     task = forms.CharField(widget=forms.TextInput(), label='task', max_length=100)
     description = forms.CharField(widget=forms.Textarea(), label='description', required=False)
