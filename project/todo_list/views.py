@@ -9,6 +9,8 @@ from django.views import *
 from django.contrib import messages
 from datetime import datetime
 from todo_list.models import *
+from django.utils import timezone
+from django.template.loader import render_to_string
 
 
 # Create your views here.
@@ -117,7 +119,7 @@ class list_view(LoginRequiredMixin, TemplateView):
         new_task = Checklist_Item.objects.create(
             task=task,
             description=description,
-            created_at = datetime.now(),
+            created_at = timezone.now(),
             is_complete = False)
 
         # add the task to the user's list
@@ -126,7 +128,13 @@ class list_view(LoginRequiredMixin, TemplateView):
         # return template with all of the user's films
         tasks = request.user.tasks.all()
         form = CreateTaskForm()
-        return render(request, 'todo_list/task_list.html', {'tasks': tasks, 'form': form})
+
+        # If HTMX, return only the fragment (no navbar)
+        if request.headers.get('HX-Request'):
+            html = render_to_string('todo_list/task_ui_partial.html', {'tasks': tasks, 'form': form}, request=request)
+            return HttpResponse(html)
+        
+        return render(request, 'todo_list/lists.html', {'tasks': tasks, 'form': form})
     
     def complete_task(request):
         task_id = request.POST.get('id')
@@ -150,6 +158,33 @@ class list_view(LoginRequiredMixin, TemplateView):
         tasks = request.user.tasks.all()
         form = CreateTaskForm()
         return render(request, 'todo_list/task_list.html', {'tasks': tasks, 'form': form})
+    
+    def edit_task(request):
+        task_id = request.POST.get('id') or request.GET.get('id')
+        task = Checklist_Item.objects.filter(id=task_id).get()
+
+        if request.method == 'POST':
+            form = EditTaskForm(request.POST)
+            if form.is_valid():
+                task.task = form.cleaned_data['task']
+                task.description = form.cleaned_data['description']
+                task.is_complete = form.cleaned_data['is_complete']
+                task.updated_at = timezone.now()
+                task.save()
+                return render(request, 'todo_list/task_list.html', {
+                    'tasks': request.user.tasks.all(),
+                    'form': CreateTaskForm()
+                })  # Replace with your actual redirect target
+            else:
+                return HttpResponse("Invalid form submission")
+        else:
+            form = EditTaskForm(initial={
+                'task': task.task,
+                'description': task.description,
+                'is_complete': str(task.is_complete),  # 'True' or 'False'
+            })
+
+        return render(request, 'todo_list/edit_task_form.html', {'form': form, 'task': task})
     
 
 

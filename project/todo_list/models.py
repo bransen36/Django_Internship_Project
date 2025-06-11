@@ -14,3 +14,4 @@ class Checklist_Item(models.Model):
     description = models.TextField(("Long description of what the task is"), null=True)
     created_at = models.DateTimeField(("The date and time that the item was created"), auto_now=True)
     is_complete = models.BooleanField(("Has the task been completed or not"))
+    updated_at = models.DateTimeField(("The date at which the checklist item was edited if ther is one"), null=True)

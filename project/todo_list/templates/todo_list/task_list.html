@@ -31,8 +31,6 @@
 <!--
     MODALS
 -->
-
-
 <div class="gls-hidden">
     <!-- Modal to display the full details of the task as well as an edit and delete button -->
     {% for task in tasks %}
@@ -52,9 +50,16 @@
             <div class="gls-modal-footer gls-text-right">
                 <small class="gls-align-left gls-width-auto">Created On: {{ task.created_at }}</small>
                 <div class="gls-flex gls-flex-around">
+                    <input type="hidden" name="id" value="{{ task.id }}">
+                    <button
+                    class="gls-button gls-button-secondary" 
+                    gls-toggle="target: #edit_modal_{{ task.id }}"
+                    hx-get="{% url 'edit_task' %}?id={{ task.id }}"
+                    hx-target="#edit_modal_content_{{ task.id }}"
+                    hx-swap="innerHTML">Edit</button>
                     <form class="">
                         {% csrf_token %}
-                        <button class="gls-button gls-button-secondary">Edit</button>
+                        
                         <input type="hidden" name="id" value="{{ task.id }}">
                         <button type="submit" class="gls-button gls-button-danger gls-modal-close" hx-post="{% url 'delete_task' %}" hx-target="#container">Delete</button>
                     </form>
@@ -62,6 +67,18 @@
             </div>
         </div>
     </div>
+    <div id="edit_modal_{{ task.id }}" class="gls-modal-container" gls-modal>
+        <div class="gls-modal-dialog">
+            <button class="gls-modal-close-default" type="button" gls-close></button>
+            <div class="gls-modal-header">
+                <h2>Edit: {{ task.task }}</h2>
+            </div>
+            <div id="edit_modal_content_{{ task.id }}" class="gls-modal-body">
+                
+            </div>
+        </div>
+    </div>
+
     {% endfor %}
 </div>
 

@@ -29,8 +29,11 @@ class CreateTaskForm(forms.Form):
 class EditTaskForm(forms.Form):
     task = forms.CharField(widget=forms.TextInput(), label='task', max_length=100)
     description = forms.CharField(widget=forms.Textarea(), label='description', required=False)
-    is_complete = forms.ChoiceField()
-
-class DeleteTaskForm(forms.Form):
-    pass
+    is_complete = forms.TypedChoiceField(
+    choices=[(True, 'Complete'), (False, 'Incomplete')],
+    coerce=lambda x: x == 'True',
+    widget=forms.RadioSelect(attrs={'class': 'gls-radio'}),
+    label='Is Complete',
+    empty_value=None
+    )
     

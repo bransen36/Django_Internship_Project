@@ -1,0 +1,28 @@
+{% load widget_tweaks %}
+
+<form>
+    {% csrf_token %}
+    <input type="hidden" name="id" value="{{ task.id }}">
+    <div class="gls-margin">
+        {% render_field form.task name="task" class="gls-input" placeholder="Task" %}
+        {{ form.task.errors}}
+    </div>
+    <div class="gls-margin">
+        {% render_field form.description name="description" class="gls-textarea" placeholder="Description" %}
+        {{ form.description.errors }}
+    </div>
+    <div class="gls-margin">
+        <label class="gls-form-label"><h5><strong>Status</strong></h5></label>
+        <div class="gls-form-controls">
+            {% for radio in form.is_complete %}
+            <label class="gls-margin-right">                
+                {{ radio.tag }}
+                {{ radio.choice_label }}
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="gls-text-right">
+        <button class="gls-button gls-button-primary gls-modal-close" hx-post="{% url 'edit_task' %}" hx-target="#container" hx-swap="outerHTML">Save</button>
+    </div>
+</form>

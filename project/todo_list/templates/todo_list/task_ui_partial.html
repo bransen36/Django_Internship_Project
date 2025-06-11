@@ -1,15 +1,6 @@
-{% extends "todo_list/index.html" %}
 {% load widget_tweaks %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <title>{% block title %}Lists{% endblock %}</title>
-</head>
-
-<body>
-    {% block content %}
-    <div id="task_ui">
+<div id="task_ui">
         <div class="gls-container">
             <button class="gls-button gls-button-primary gls-align-right gls-margin-top"
                 gls-toggle="target: #task_modal">New Item</button>
@@ -48,7 +39,3 @@
             {% include 'todo_list/task_list.html' %}
         </div>
     </div>
-    {% endblock %}
-</body>
-
-</html>
