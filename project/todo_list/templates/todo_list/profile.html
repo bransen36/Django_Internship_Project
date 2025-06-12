@@ -5,38 +5,61 @@
     <title>{% block title %}Profile{% endblock %}</title>
 </head>
 
+{% block content %}
+
 <body>
-    {% block content %}
     <div class="gls-container">
-        <h1>Profile</h1>
-        <div class="gls-margin">
-            {% render_field form.first_name class="gls-input" placeholder="First Name" %}
-            {{ form.firstname.errors }}
-        </div>
-        <div class="gls-margin">
-            {% render_field form.last_name class="gls-input" placeholder="Last Name" %}
-            {{ form.lastname.errors }}
-        </div>
-        <div class="gls-margin">
-            {% render_field form.username class="gls-input" placeholder="Username" %}
-            {{ form.username.errors }}
-        </div>
-        <div class="gls-margin">
-            {% render_field form.phone_number class="gls-input" placeholder="Phone" %}
-            {{ form.phone_number.errors }}
-        </div>
-        <div class="gls-margin">
-            {% render_field form.address1 class="gls-input" placeholder="Address 1" %}
-            {{ form.address1.errors }}
-        </div>
-        <div class="gls-margin">
-            {% render_field form.address2 class="gls-input" placeholder="Address 2" %}
-            {{ form.address2.errors }}
-        </div>
-        <div class="gls-margin">
-            <button class="gls-button gls-button-secondary">Edit</button>
+        <h1 class="gls-margin">Profile</h1>
+        <div id="profileFormContainer">
+            <form method="post" id="profile_form" hx-post="{% url 'edit_profile' %}" hx-swap="outerHTML"
+                hx-target="#profileFormContainer">
+                {% csrf_token %}
+                <div class="gls-margin">
+                    {% render_field form.first_name class="gls-input" placeholder="First Name" disabled="disabled" %}
+                    {{ form.first_name.errors }}
+                </div>
+                <div class="gls-margin">
+                    {% render_field form.last_name class="gls-input" placeholder="Last Name" disabled="disabled" %}
+                    {{ form.last_name.errors }}
+                </div>
+                <div class="gls-margin">
+                    {% render_field form.username class="gls-input" placeholder="Username" disabled="disabled" %}
+                    {{ form.username.errors }}
+                </div>
+                <div class="gls-margin">
+                    {% render_field form.phone_number class="gls-input" placeholder="Phone" disabled="disabled" %}
+                    {{ form.phone_number.errors }}
+                </div>
+                <div class="gls-margin">
+                    {% render_field form.address1 class="gls-input" placeholder="Address 1" disabled="disabled" %}
+                    {{ form.address1.errors }}
+                </div>
+                <div class="gls-margin">
+                    {% render_field form.address2 class="gls-input" placeholder="Address 2" disabled="disabled" %}
+                    {{ form.address2.errors }}
+                </div>
+                <div class="gls-margin">
+                    <button type="button" id="editBtn" class="gls-button gls-button-secondary">Edit</button>
+                    <button type="submit" id="saveBtn" class="gls-button gls-button-tertiary"
+                        style="display: none;">Save</button>
+                </div>
+            </form>
         </div>
     </div>
-    
-    {% endblock %}
 </body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const editBtn = document.getElementById("editBtn");
+        const saveBtn = document.getElementById("saveBtn");
+
+        editBtn?.addEventListener("click", () => {
+            const inputs = document.querySelectorAll("#profile_form .gls-input");
+            inputs.forEach(el => el.removeAttribute("disabled"));
+
+            editBtn.style.display = "none";
+            saveBtn.style.display = "inline-block";
+        });
+    });
+</script>
+{% endblock %}

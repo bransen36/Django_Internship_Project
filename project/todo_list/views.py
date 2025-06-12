@@ -198,5 +198,21 @@ class profile_view(LoginRequiredMixin, TemplateView):
             'phone_number': user.phone_number,
             'address1': user.address1,
             'address2': user.address2
-        })
-        return render(request, 'todo_list/profile.html', {'user': user, 'form': form})
+        }, instance=user)
+
+        return render(request, 'todo_list/profile.html', {'form': form})
+    
+    def edit_profile(request):
+        user = request.user
+        form = EditUserForm(request.POST, instance=user)
+
+        if form.is_valid():
+            form.save()
+
+            for field in form.fields.values():
+                field.widget.attrs['disabled'] = 'disabled'
+
+            html = render_to_string("todo_list/profile.html", {'form': form})
+            return HttpResponse(html)
+
+        return render(request, 'todo_list/profile.html', {'form': form})

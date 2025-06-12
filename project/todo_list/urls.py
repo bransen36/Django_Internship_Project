@@ -17,7 +17,8 @@ htmx_urlpatterns = [
     path('add_task/', views.list_view.add_task, name='add_task'),
     path('complete_task/', views.list_view.complete_task, name='complete_task'),
     path('delete_task/', views.list_view.delete_task, name='delete_task'),
-    path('edit_task/', views.list_view.edit_task, name='edit_task')
+    path('edit_task/', views.list_view.edit_task, name='edit_task'),
+    path('edit_profile/', views.profile_view.edit_profile, name='edit_profile')
 ]
 
 urlpatterns += htmx_urlpatterns
