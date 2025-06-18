@@ -11,6 +11,7 @@ from datetime import datetime
 from todo_list.models import *
 from django.utils import timezone
 from django.template.loader import render_to_string
+from chartjs.views.lines import BaseLineChartView
 
 
 # Create your views here.
@@ -135,9 +136,11 @@ class list_view(LoginRequiredMixin, TemplateView):
         task = Checklist_Item.objects.get(id=task_id, user=request.user)
         if task.is_complete:
             task.is_complete = False
+            task.updated_at = timezone.now()
             task.save()
         else:
             task.is_complete = True
+            task.updated_at = timezone.now()
             task.save()
         tasks = request.user.tasks.all()
         return render(request, 'todo_list/task_list.html', {'tasks': tasks})
@@ -208,11 +211,61 @@ class profile_view(LoginRequiredMixin, TemplateView):
 
         if form.is_valid():
             form.save()
-
             for field in form.fields.values():
                 field.widget.attrs['disabled'] = 'disabled'
 
-            html = render_to_string("todo_list/profile.html", {'form': form})
+            html = render(request, "todo_list/profile_form.html", {'form': form})
             return HttpResponse(html)
 
-        return render(request, 'todo_list/profile.html', {'form': form})
+        return render(request, 'todo_list/profile_form.html', {'form': form})
+
+from django.contrib.auth.decorators import login_required
+from django.db.models.functions import TruncDate
+from django.http import JsonResponse
+from datetime import timedelta, date
+from collections import defaultdict
+
+@login_required
+def completed_items_chart_data(request):
+    user = request.user
+
+    # Step 1: Get the range from query params
+    range_days = int(request.GET.get('range', 7))  # default to past 7 days
+
+    today = date.today()
+    start_date = today - timedelta(days=range_days)
+
+    completions = (
+        Checklist_Item.objects
+        .filter(user=user, is_complete=True, updated_at__isnull=False, updated_at__date__gte=start_date)
+        .annotate(day=TruncDate('updated_at'))
+        .values('day')
+        .order_by('day')
+    )
+
+    daily_counts = defaultdict(int)
+    for entry in completions:
+        daily_counts[entry['day']] += 1
+
+    # Always pad with 3 extra days before and after
+    padded_start = start_date - timedelta(days=1)
+    padded_end = today + timedelta(days=0)
+
+    labels, daily_data, cumulative_data = [], [], []
+    current_date = padded_start
+    cumulative_total = 0
+
+    while current_date <= padded_end:
+        daily = daily_counts[current_date]
+        cumulative_total += daily
+        labels.append(current_date.strftime("%Y-%m-%d"))
+        daily_data.append(daily)
+        cumulative_data.append(cumulative_total)
+        current_date += timedelta(days=1)
+
+    return JsonResponse({
+        'labels': labels,
+        'daily': daily_data,
+        'cumulative': cumulative_data,
+    })
+

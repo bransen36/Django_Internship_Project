@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(), label='Username', max_length=100)
@@ -25,13 +26,13 @@ class SignUpForm(forms.Form):
 class EditUserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username']
+        fields = ['first_name', 'last_name', 'username', 'phone_number', 'address1', 'address2']
     # first_name = forms.CharField(widget=forms.TextInput(), label='firstname')
     # last_name = forms.CharField(widget=forms.TextInput(), label='lastname')
     # username = forms.CharField(widget=forms.TextInput(), label='username')
-    phone_number = forms.IntegerField(widget=forms.TextInput(), label='phone', required=False)
-    address1 = forms.CharField(widget=forms.TextInput(), label='address1', required=False)
-    address2 = forms.CharField(widget=forms.TextInput(), label='address2', required=False)
+    # phone_number = forms.IntegerField(widget=forms.TextInput(), label='phone', required=False)
+    # address1 = forms.CharField(widget=forms.TextInput(), label='address1', required=False)
+    # address2 = forms.CharField(widget=forms.TextInput(), label='address2', required=False)
         
 class CreateTaskForm(forms.Form):
     task = forms.CharField(widget=forms.TextInput(), label='task', max_length=100)

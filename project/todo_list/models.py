@@ -7,9 +7,9 @@ class User(AbstractUser):
     id = models.AutoField(primary_key=True)
     first_name = models.CharField(("This is the first name of the user"), max_length=50)
     last_name = models.CharField(("This is the last name of the user"), max_length=50)
-    phone_number = PhoneNumberField(null=True, blank=True)
-    address1 = models.CharField(("The user's primary address"), null=True)
-    address2 = models.CharField(("The user's secondary address"), null=True)
+    phone_number = PhoneNumberField(region='US', null=True, blank=True)
+    address1 = models.CharField(("The user's primary address"), null=True, blank=True)
+    address2 = models.CharField(("The user's secondary address"), null=True, blank=True)
     
 class Checklist_Item(models.Model):
     id = models.AutoField(primary_key=True)

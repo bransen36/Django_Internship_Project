@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'todo_list',
-    'widget_tweaks'
+    'widget_tweaks',
+    'phonenumber_field',
+    'chartjs'
 ]
 
 MIDDLEWARE = [

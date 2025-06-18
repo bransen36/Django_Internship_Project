@@ -1,16 +1,89 @@
 {% extends "todo_list/index.html" %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>{% block title %}Dashboard{% endblock %}</title>
 </head>
+
 <body>
     <main>
         {% block content %}
         <div class="gls-container">
             <h1>Dashboard</h1>
+            <select id="rangeSelect" class="gls-select gls-margin">
+                <option value="7">Past Week</option>
+                <option value="30">Past Month</option>
+                <option value="365">Past Year</option>
+            </select>
+            <canvas id="completedChart" class="gls-margin"></canvas>
         </div>
+        <script>
+            let chart; // store reference to the chart object
+
+            function loadChart(range = 7) {
+                fetch(`/chart-data/?range=${range}`)
+                    .then(response => response.json())
+                    .then(json => {
+                        const maxY = Math.max(...json.cumulative);
+                        const ctx = document.getElementById('completedChart').getContext('2d');
+
+                        if (chart) {
+                            chart.destroy(); // remove existing chart before redrawing
+                        }
+
+                        chart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: json.labels,
+                                datasets: [
+                                                                        {
+                                        type: 'line',
+                                        label: 'Cumulative Completed Tasks',
+                                        data: json.cumulative,
+                                        borderColor: '#83AAAF',
+                                        backgroundColor: '#83AAAF',
+                                        fill: false,
+                                        tension: 0.3,
+                                        yAxisID: 'y',
+                                    },
+                                    {
+                                        type: 'bar',
+                                        label: 'Tasks Completed That Day',
+                                        data: json.daily,
+                                        backgroundColor: '#C45B6A',
+                                        borderColor: '#C45B6A',
+                                        borderWidth: 1,
+                                        yAxisID: 'y',
+                                    }
+                                ]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        precision: 0,
+                                        suggestedMax: maxY + 1
+                                    }
+                                }
+                            }
+                        });
+                    });
+            }
+
+            // Initial load
+            loadChart();
+
+            // Listen for range change
+            document.getElementById('rangeSelect').addEventListener('change', function () {
+                loadChart(this.value);
+            });
+        </script>
+
+
+
         {% endblock %}
     </main>
 </body>
+
 </html>

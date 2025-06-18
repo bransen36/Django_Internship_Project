@@ -2,3 +2,4 @@ Django==5.2.1
 django-extensions==3.2.3
 django-widget-tweaks==1.5.0
 django-phonenumber-field[phonenumbers]
+django-chartjs==2.3.0

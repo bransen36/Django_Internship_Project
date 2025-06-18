@@ -21,4 +21,9 @@ htmx_urlpatterns = [
     path('edit_profile/', views.profile_view.edit_profile, name='edit_profile')
 ]
 
+chart_urlpatterns = [
+    path('chart-data/', views.completed_items_chart_data, name='completed_items_chart_data'),
+]
+
 urlpatterns += htmx_urlpatterns
+urlpatterns += chart_urlpatterns
